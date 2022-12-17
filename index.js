@@ -1,67 +1,30 @@
 let canvas = document.querySelector('canvas');
+let ctx = canvas.getContext("2d");
 
-let ctx = canvas.getContext('2d');
 let animationFrame;
-let px  = 0;
-let py  = 0;
-let idaX = true;
-window.onload = desenha();
 
+let inicioRecorte = 0;
+window.onload = animation();
 
-function desenha(){
-    if(px == canvas.width - 100){
-        idaX = false;
-        idaYQuadrado();
-    }
-    if(idaX){
-        idaXQuadrado();
-    }
-    // ctx.beginPath()
-    // ctx.moveTo(0,0)
-    // ctx.arcTo(350,350,700,0,100)
-    // ctx.lineTo(700,0)
-    // ctx.stroke()
-    // ctx.closePath()
-}
-function idaXQuadrado(){
-    px++
-    desenhaQuadrado()
-    animationFrame = frameAnimation(desenha);
-}
-function idaYQuadrado(){
-    if(py == canvas.height - 100){
-        voltaXQuadrado();
-        return;
-    }
-    py++
-    desenhaQuadrado()
-    animationFrame = frameAnimation(idaYQuadrado);
-}
-function voltaXQuadrado(){
-    if(px == 0){
-        voltaYQuadrado();
-        return;
-    }
-    px--;
-    desenhaQuadrado()
-    animationFrame = frameAnimation(voltaXQuadrado);
-}
-function voltaYQuadrado(){
-    if(py == 0){
-        idaX = true
-        desenha();
-        return;
-    }
-    py--;
-    desenhaQuadrado()
-    animationFrame = frameAnimation(voltaYQuadrado);
+function animation(){
+
+    let image = new Image();
+    image.src = 'assets/BODY_animation.png';
+
+    setInterval(() => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        let image = new Image();
+        image.src = 'assets/BODY_animation.png';
+       
+        console.log(inicioRecorte);
+        image.onload = () =>{
+            ctx.drawImage(image,inicioRecorte, 0,64,64,0,0,64,64);
+        }
+        inicioRecorte += image.width / 8 ;
+        if(inicioRecorte > 384 ){
+            inicioRecorte = 0;
+        }
+    }, 100);
+    
 }
 
-function desenhaQuadrado(){
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = '#00f';
-    ctx.fillRect(px,py,100,100);
-}
-function frameAnimation(animationFrame) {
-     requestAnimationFrame(animationFrame);
-}
